@@ -1,4 +1,4 @@
-enum class Speech(priority: Int) {
+enum class Speech(val priority: Int) {
     TWO(2),
     THREE(3),
     FOUR(4),
@@ -12,5 +12,7 @@ enum class Speech(priority: Int) {
     QUEEN(12),
     KING(13),
     ACE(14),
-    JOKER(15)
+    JOKER(15);
+
+    fun isGreaterThan(speech: Speech) = this.priority > speech.priority
 }

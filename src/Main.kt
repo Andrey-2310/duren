@@ -1,6 +1,6 @@
 fun main() {
-    val deck = Deck()
-    println(deck.cards.size)
-    println(deck.getSeveralCards(2))
-    println(deck.cards.size)
+    val card1 = Card(Speech.JOKER, jokerSuit = JokerSuit.RED)
+
+    println(card1.isGreaterThan(Card(Speech.JOKER, jokerSuit = JokerSuit.BLACK), Suit.SPADE))
+
 }
