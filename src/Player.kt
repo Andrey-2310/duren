@@ -1,19 +1,26 @@
-class Player(val cardsInHand: List<Card>) {
+class Player(val cardsInHand: MutableList<Card>, val turn: Boolean = false) {
 
-    fun showCards() = cardsInHand.forEachIndexed { index, card -> println("${index + 1} - $card")}
+    fun showCards() = cardsInHand.forEachIndexed { index, card -> println("${index + 1} - $card") }
 
     fun getCard(index: Int): Card {
-        try {
-            return cardsInHand[index-1]
+        return try {
+            cardsInHand[index - 1]
         } catch (exception: IndexOutOfBoundsException) {
             println("Entered index is out of bounds, first card selected")
-            return cardsInHand[0]
+            cardsInHand[0]
         }
     }
 
-    fun showSimilarCards(tableCards: List<Card>) =
-        cardsInHand.filter {tableCards.map { it.speech }.contains(it.speech) }
+    fun getSimilarCards(tableCards: List<Card>) =
+        cardsInHand.filter { tableCards.map { it.speech }.contains(it.speech) }
 
-    fun showGreaterCards(card: Card, trump: Suit) = cardsInHand.filter { it.isGreaterThan(card, trump) }
+    fun getGreaterCards(card: Card, trump: Suit) = cardsInHand.filter { it.isGreaterThan(card, trump) }
+
+    fun getLowestTrumpCard(trump: Suit) = cardsInHand
+        .filter { it.suit == trump || (it.jokerSuit != null && it.jokerSuit.overheadedSuits.contains(trump)) }
+        .sortedBy { it.speech.priority }
+        .firstOrNull()
+
+    fun takeCards(cards: List<Card>) = cardsInHand.addAll(cards)
 
 }
