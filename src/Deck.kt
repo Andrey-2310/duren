@@ -13,10 +13,10 @@ class Deck {
         trump = findNewTrump()
     }
 
-    fun getSeveralCards(amount: Int): List<Card> {
+    fun getSeveralCards(amount: Int): MutableList<Card> {
         val receivedCards = cards.take(amount)
         cards.removeAll(receivedCards)
-        return receivedCards
+        return receivedCards.toMutableList()
     }
 
     private fun findNewTrump(): Suit {
