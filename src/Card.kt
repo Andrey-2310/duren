@@ -1,5 +1,5 @@
 class Card(val speech: Speech, val suit: Suit? = null, val jokerSuit: JokerSuit? = null) {
-    override fun toString(): String = "$speech ${suit ?: jokerSuit}"
+    override fun toString(): String = "$speech${suit?.sign ?: jokerSuit}"
 
     fun isGreaterThan(card: Card, trump: Suit) =
         isGreaterWithSameSuit(card) || isTrumpUnlikeAnother(card, trump) || isJokerOverOtherCard(card)

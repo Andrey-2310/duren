@@ -13,8 +13,6 @@ class Table {
     )
     val tableCards: MutableList<Pair<Card, Card>> = ArrayList()
 
-    val scanner = Scanner(System.`in`)
-
     init {
         players()
             .minWith(nullsLast(compareBy { it.lowestTrumpCardPriority(deck.trump) }))!!
@@ -41,10 +39,11 @@ class Table {
 
     fun recursiveMove(attackingPlayer: Player, defendingPlayer: Player): Boolean {
         attackingPlayer.showCards()
-        val attackingCard = attackingPlayer.cardByIndex(scanner.nextInt())
+        val attackingCard = attackingPlayer.receiveCardByInput()
         defendingPlayer.showCards()
         val defendingCard = defendingPlayer.cardFromGreaterOrDefault(attackingCard, deck.trump)
         if (defendingCard != null) {
+            println("Your card was defended by $defendingCard")
             tableCards.add(Pair(attackingCard, defendingCard))
             recursiveMove(attackingPlayer, defendingPlayer)
         } else {

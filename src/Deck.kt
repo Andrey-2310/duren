@@ -11,6 +11,7 @@ class Deck {
             .toMutableList()
 
         trump = findNewTrump()
+        println("Trump: ${trump.sign}")
     }
 
     fun getSeveralCards(amount: Int): MutableList<Card> {

@@ -3,20 +3,24 @@ import java.util.Scanner
 class Player(
     val cardsInHand: MutableList<Card>,
     val name: String,
-    var attack: Boolean = false,
-    var defend: Boolean = false
+    var attack: Boolean = false
 ) {
 
     val scanner = Scanner(System.`in`)
 
     fun showCards() = cardsInHand.forEachIndexed { index, card -> println("${index + 1} - $card") }
 
-    fun cardByIndex(index: Int): Card {
+    fun receiveCardByInput(): Card {
+        println("${this.name}: Select card:")
+        return receiveCardByIndex(scanner.nextInt())
+    }
+
+    fun receiveCardByIndex(index: Int): Card {
         return try {
-            cardsInHand[index - 1]
+            cardsInHand.removeAt(index - 1)
         } catch (exception: IndexOutOfBoundsException) {
             println("Entered index is out of bounds, first card selected")
-            cardsInHand[0]
+            cardsInHand.removeAt(0)
         }
     }
 
@@ -26,6 +30,7 @@ class Player(
     fun greaterCards(attackingCard: Card, trump: Suit) = cardsInHand.filter { it.isGreaterThan(attackingCard, trump) }
 
     fun cardFromGreaterOrDefault(attackingCard: Card, trump: Suit): Card? {
+        println("Attacking card: $attackingCard")
         val greaterCards = greaterCards(attackingCard, trump)
         return if (greaterCards.isEmpty()) {
             println("There are no cards to defend")
@@ -34,8 +39,7 @@ class Player(
     }
 
     private fun chooseGreaterCard(greaterCards: List<Card>): Card {
-        println("Choose Card")
-        val chosedCard = cardByIndex(scanner.nextInt())
+        val chosedCard = receiveCardByInput()
         return if (greaterCards.contains(chosedCard)) chosedCard else chooseGreaterCard(greaterCards)
     }
 

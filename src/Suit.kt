@@ -1,6 +1,7 @@
-enum class Suit {
-    DIAMONDS,
-    HEARTS,
-    CLUBS,
-    SPADE,
+enum class Suit(val sign: String) {
+    DIAMONDS("♦"),
+    HEARTS("♥"),
+    CLUBS("♣"),
+    SPADE("♠"),
+
 }
