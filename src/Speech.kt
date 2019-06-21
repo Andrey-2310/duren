@@ -12,7 +12,7 @@ enum class Speech(val priority: Int, private val shortName: String) {
     QUEEN(12, "Q"),
     KING(13, "K"),
     ACE(14, "A"),
-    JOKER(15, "J");
+    JOKER(15, "JOKER");
 
     override fun toString() = this.shortName
 

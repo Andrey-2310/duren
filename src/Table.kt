@@ -29,7 +29,7 @@ class Table {
     }
 
     fun newPlayerIteration(attackingPlayer: Player): Boolean {
-        val isDefenderCopedWithAttack = recursiveMove(attackingPlayer, circle.next(attackingPlayer))
+        val isDefenderCopedWithAttack = recursiveMove(attackingPlayer, circle.next(attackingPlayer), false)
         players()
             .filter { it.getCardsAmount() < cardInitAmount }
             //TODO: handle situation when there is no more cards in deck
@@ -37,21 +37,20 @@ class Table {
         return isDefenderCopedWithAttack
     }
 
-    fun recursiveMove(attackingPlayer: Player, defendingPlayer: Player): Boolean {
-        attackingPlayer.showCards()
-        val attackingCard = attackingPlayer.receiveCardByInput()
-        defendingPlayer.showCards()
+    fun recursiveMove(attackingPlayer: Player, defendingPlayer: Player, abilityToRefuse: Boolean): Boolean {
+        attackingPlayer.showCardsOrRefuse(abilityToRefuse)
+        val attackingCard = attackingPlayer.receiveCardByInput() ?: return true
+        defendingPlayer.showCardsOrRefuse(true)
         val defendingCard = defendingPlayer.cardFromGreaterOrDefault(attackingCard, deck.trump)
         if (defendingCard != null) {
             println("Your card was defended by $defendingCard")
             tableCards.add(Pair(attackingCard, defendingCard))
-            recursiveMove(attackingPlayer, defendingPlayer)
+            recursiveMove(attackingPlayer, defendingPlayer, true)
         } else {
             defendingPlayer.takeCards(collectCardFromTheTable(attackingCard))
-            tableCards.clear()
-            return false
         }
-        return true
+        tableCards.clear()
+        return defendingCard != null
     }
 
     private fun collectCardFromTheTable(attackingCard: Card) = tableCards

@@ -10,12 +10,24 @@ class Player(
 
     fun showCards() = cardsInHand.forEachIndexed { index, card -> println("${index + 1} - $card") }
 
-    fun receiveCardByInput(): Card {
+    /**
+     * Refuse means Done for the attacking player
+     * and Take for defending player
+     */
+    fun showCardsOrRefuse(abilityToRefuse: Boolean) {
+        if (abilityToRefuse) {
+            println("0 - ${if (attack) "Done" else "Take"}")
+        }
+        showCards()
+    }
+
+    fun receiveCardByInput(): Card? {
         println("${this.name}: Select card:")
         return receiveCardByIndex(scanner.nextInt())
     }
 
-    fun receiveCardByIndex(index: Int): Card {
+    fun receiveCardByIndex(index: Int): Card? {
+        if (index == 0) return null
         return try {
             cardsInHand.removeAt(index - 1)
         } catch (exception: IndexOutOfBoundsException) {
@@ -38,8 +50,8 @@ class Player(
         } else chooseGreaterCard(greaterCards)
     }
 
-    private fun chooseGreaterCard(greaterCards: List<Card>): Card {
-        val chosedCard = receiveCardByInput()
+    private fun chooseGreaterCard(greaterCards: List<Card>): Card? {
+        val chosedCard = receiveCardByInput() ?: return null
         return if (greaterCards.contains(chosedCard)) chosedCard else chooseGreaterCard(greaterCards)
     }
 
