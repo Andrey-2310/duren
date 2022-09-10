@@ -70,5 +70,6 @@ class Player(
 
     fun getCardsAmount() = cardsInHand.size
 
+    // If there are no cards on the table then Done/Take option is not available
     private fun getMinCardIndex(isTableCardEmpty: Boolean) = if (isTableCardEmpty) 1 else 0
 }
