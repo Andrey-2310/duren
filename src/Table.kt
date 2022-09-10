@@ -1,5 +1,3 @@
-import java.util.Scanner
-
 class Table {
 
     private val cardInitAmount = 6
@@ -11,7 +9,7 @@ class Table {
             Player(deck.getSeveralCards(cardInitAmount), "lol")
         )
     )
-    val tableCards: MutableList<Pair<Card, Card>> = ArrayList()
+    private val tableCards: MutableList<Card> = ArrayList()
 
     init {
         players()
@@ -39,25 +37,23 @@ class Table {
 
     fun recursiveMove(attackingPlayer: Player, defendingPlayer: Player, abilityToRefuse: Boolean): Boolean {
         attackingPlayer.showCardsOrRefuse(abilityToRefuse)
-        val attackingCard = attackingPlayer.receiveCardByInput() ?: return true
+        val attackingCard = attackingPlayer.getCardToAttack(tableCards) ?: return true
         defendingPlayer.showCardsOrRefuse(true)
-        val defendingCard = defendingPlayer.cardFromGreaterOrDefault(attackingCard, deck.trump)
+        val defendingCard = defendingPlayer.getCardToDefend(attackingCard, deck.trump)
         if (defendingCard != null) {
             println("Your card was defended by $defendingCard")
-            tableCards.add(Pair(attackingCard, defendingCard))
+
+            tableCards.addAll(listOf(attackingCard, defendingCard))
+            println("All cards on the table: $tableCards")
+
             recursiveMove(attackingPlayer, defendingPlayer, true)
         } else {
-            defendingPlayer.takeCards(collectCardFromTheTable(attackingCard))
+            tableCards.add(attackingCard)
+            defendingPlayer.takeCards(tableCards)
         }
         tableCards.clear()
         return defendingCard != null
     }
-
-    private fun collectCardFromTheTable(attackingCard: Card) = tableCards
-        .map { it.first }
-        .union(tableCards.map { it.second })
-        .union(setOf(attackingCard))
-        .toList()
 
     private fun findNewAttackingPlayer(result: Boolean, previousAttackingPlayer: Player) {
         previousAttackingPlayer.attack = false
